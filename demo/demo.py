@@ -253,33 +253,43 @@ def demo_10(trader: shift.Trader):
     for o in trader.get_order_book("AAPL", shift.OrderBookType.GLOBAL_BID, 5):
         print("%7.2f\t\t%4d\t%6s\t\t%19s" % (o.price, o.size, o.destination, o.time))
 
-
+def demo_11(trader: shift.Trader):
+    stock_ls = trader.get_stock_list()
+    while True:
+        print(trader.get_last_trade_time().strftime("%Y-%m-%d %H:%M:%S"))
+        for stock in stock_ls:
+            print(f"{stock}: {trader.get_last_price(stock)}")
+        time.sleep(1)
+        print()
+        
+        
 def main(argv):
     # create trader object
-    trader = shift.Trader("democlient")
+    with shift.Trader("democlient") as trader:
 
-    # connect and subscribe to all available order books
-    try:
-        trader.connect("initiator.cfg", "password")
-        trader.sub_all_order_book()
-    except shift.IncorrectPasswordError as e:
-        print(e)
-    except shift.ConnectionTimeoutError as e:
-        print(e)
+        # connect and subscribe to all available order books
+        try:
+            trader.connect("initiator.cfg", "password")
+            trader.sub_all_order_book()
+        except shift.IncorrectPasswordError as e:
+            print(e)
+        except shift.ConnectionTimeoutError as e:
+            print(e)
 
-    # demo_01(trader)
-    # demo_02(trader)
-    # demo_03(trader)
-    # demo_04(trader)
-    # demo_05(trader)
-    # demo_06(trader)
-    # demo_07(trader)
-    # demo_08(trader)
-    # demo_09(trader)
-    # demo_10(trader)
+        # demo_01(trader)
+        # demo_02(trader)
+        # demo_03(trader)
+        # demo_04(trader)
+        # demo_05(trader)
+        # demo_06(trader)
+        # demo_07(trader)
+        # demo_08(trader)
+        # demo_09(trader)
+        # demo_10(trader)
+        demo_11(trader)
 
-    # disconnect
-    trader.disconnect()
+
+
 
     return
 
